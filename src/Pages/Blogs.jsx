@@ -23,11 +23,20 @@ const Blogs = () => {
     };
 
     useEffect(()=>{
-        getBlogs("blogs").
-        then(blogs=>setBlogs(blogs))
+        getBlogs("blogs")
+        .then(blogs => {
+            // Add isLiked property to each blog based on current user
+            const blogsWithLikeStatus = blogs.map(blog => ({
+                ...blog,
+                isLiked: user && blog.likedBy ? blog.likedBy.includes(user.uid) : false
+            }));
+            setBlogs(blogsWithLikeStatus);
+        })
         .catch(err=>console.log(err))
         .finally(()=>setIsLoading(false));
-    },[])
+    }, [user]); // Add user as dependency
+
+    
 
     const handleLike = async (blogId) => {
         try {
@@ -200,12 +209,12 @@ const Blogs = () => {
                                                 className="text-gray-600 hover:text-red-500 transition-colors duration-300 flex items-center space-x-2"
                                                 onClick={() => handleLike(blog.id)}
                                             >
-                                                <i className={`fas fa-heart ${blog.isLiked ? 'text-red-500 scale-110' : ''} transform transition-all duration-200`}></i>
+                                                <i className={`fas fa-heart ${blog.isLiked ? 'text-red-500 scale-110' : ''} transform transition-all duration-200 hover:scale-150 text-lg`}></i>
                                                 <span>{blog.likes}</span>
                                             </button>
                                             <div className="flex items-center space-x-2 text-gray-500">
                                                 <span className="flex items-center space-x-1">
-                                                    <i className="fas fa-comment"></i>
+                                                    <i className="fas fa-comment text-lg"></i>
                                                     <span>{blog.comments?.length || 0}</span>
                                                 </span>
                                             </div>
