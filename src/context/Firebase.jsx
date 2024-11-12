@@ -9,9 +9,9 @@ import {
 } from "firebase/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
-import { getDatabase, ref, set } from "firebase/database";
-import { useNavigate } from "react-router-dom";
-import { addDoc, collection, getDocs, getFirestore } from "firebase/firestore";
+import { getDatabase, ref, set, increment } from "firebase/database";
+
+import { addDoc, collection, doc, getDocs, getFirestore, updateDoc, getDoc } from "firebase/firestore";
 
 
 
@@ -76,9 +76,54 @@ const getBlogs = async (collectionName) => {
 }
 
 
+// update like
+
+const updateLike = async (collectionName, id, likes, likedBy) => {
+    if (!collectionName || !id) {
+        throw new Error('Collection name and document ID are required');
+    }
+    try {
+        const docRef = doc(fireStoreDb, String(collectionName), String(id));
+        const result = await updateDoc(docRef, { 
+            likes: Number(likes),
+            likedBy: likedBy
+        });
+        console.log("Likes and likedBy array updated successfully");
+        return result;
+    } catch (error) {
+        console.error("Error updating likes and likedBy:", error);
+        throw error;
+    }
+}
 
 
+// add comment
 
+const addComment = async (collectionName, id, comment) => {
+    try {
+        const docRef = doc(fireStoreDb, String(collectionName), String(id));
+        // First get the current document
+        const docSnap = await getDoc(docRef);
+        
+        if (docSnap.exists()) {
+            // Ensure currentComments is always an array
+            let currentComments = docSnap.data().comments;
+            if (!Array.isArray(currentComments)) {
+                currentComments = [];
+            }
+            
+            // Append new comment to existing comments array
+            const result = await updateDoc(docRef, { 
+                comments: [...currentComments, comment],
+                commentCount: increment(1)
+            });
+            return result;
+        }
+    } catch (error) {
+        console.error("Error adding comment:", error);
+        throw error;
+    }
+}
 
 
 
@@ -223,6 +268,8 @@ const FirebaseProvider = ({ children }) => {
     signOutUser,
     writeData,
     getBlogs,
+    updateLike,
+    addComment
   };
 
 

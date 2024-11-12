@@ -21,7 +21,18 @@ const WriteBlogs = () => {
   const [blogData, setBlogData] = useState({
     title: '',
     author: '',
-    content: ''
+    content: '',
+    date: new Date().toLocaleDateString(),
+    time: new Date().toLocaleTimeString(),
+    image: '',
+    category: '',
+    tags: '',
+    views: 0,
+    likes: 0,
+    likedBy: [],
+    comments: [],
+    commentCount: 0,
+    isLiked: false,
   })
 
 
@@ -53,7 +64,17 @@ const WriteBlogs = () => {
       setBlogData({
         title: '',
         author: '',
-        content: ''
+        content: '',
+        image: '',
+        category: '',
+        tags: '',
+        date: new Date().toLocaleDateString(),
+        time: new Date().toLocaleTimeString(),
+        views: 0,
+        likes: 0,
+        likedBy: [],
+        comments: [],
+        commentCount: 0
       });
       toast.success('Blog posted successfully!', {position: 'top-center'});
     } catch (error) {
@@ -120,6 +141,61 @@ const WriteBlogs = () => {
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
             placeholder="Write your blog content here..."
             required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="image" className="block text-sm font-medium text-gray-700">
+            Image URL
+          </label>
+          <input
+            type="url"
+            id="image"
+            name="image"
+            value={blogData.image}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+            placeholder="Enter image URL"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+            Category
+          </label>
+          <select
+            id="category"
+            name="category"
+            value={blogData.category}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+            required
+          >
+            <option value="">Select a category</option>
+            <option value="Technology">Technology</option>
+            <option value="Travel">Travel</option>
+            <option value="Food">Food</option>
+            <option value="Lifestyle">Lifestyle</option>
+            <option value="Fashion">Fashion</option>
+            <option value="Health">Health</option>
+            <option value="Finance">Finance</option>
+            <option value="Education">Education</option>
+            {/* Add more categories as needed */}
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="tags" className="block text-sm font-medium text-gray-700">
+            Tags
+          </label>
+          <input
+            type="text"
+            id="tags"
+            name="tags"
+            value={blogData.tags}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+            placeholder="Enter tags (comma-separated)"
           />
         </div>
 
