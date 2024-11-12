@@ -206,10 +206,15 @@ const Blogs = () => {
 
                                         <div className="flex items-center justify-between">
                                             <button 
-                                                className="text-gray-600 hover:text-red-500 transition-colors duration-300 flex items-center space-x-2"
+                                                className="text-gray-600 hover:text-red-500 transition-colors duration-100 flex items-center space-x-2"
                                                 onClick={() => handleLike(blog.id)}
                                             >
-                                                <i className={`fas fa-heart ${blog.isLiked ? 'text-red-500 scale-110' : ''} transform transition-all duration-200 hover:scale-150 text-lg`}></i>
+                                                <i className={`fas fa-heart 
+                                                    ${blog.isLiked ? 'text-red-500 animate-scale-bounce' : ''} 
+                                                    transform transition-all duration-300 
+                                                    hover:scale-110 
+                                                    text-lg`}
+                                                ></i>
                                                 <span>{blog.likes}</span>
                                             </button>
                                             <div className="flex items-center space-x-2 text-gray-500">
