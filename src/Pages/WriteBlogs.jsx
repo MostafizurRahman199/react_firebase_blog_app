@@ -33,6 +33,7 @@ const WriteBlogs = () => {
     comments: [],
     commentCount: 0,
     isLiked: false,
+    isBookmarked: false,
   })
 
 
@@ -74,7 +75,8 @@ const WriteBlogs = () => {
         likes: 0,
         likedBy: [],
         comments: [],
-        commentCount: 0
+        commentCount: 0,
+        isBookmarked: false,
       });
       toast.success('Blog posted successfully!', {position: 'top-center'});
     } catch (error) {

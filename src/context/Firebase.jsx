@@ -15,7 +15,7 @@ import { addDoc, collection, doc, getDocs, getFirestore, updateDoc, getDoc } fro
 
 
 
-//__________________________Context
+//__________________________Context & Config
 
 
 const FirebaseContext = createContext();
@@ -46,18 +46,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getDatabase(app);
-
-
-
-
-// ___________________________Firestore Database
-
 export const fireStoreDb = getFirestore(app);
 
 
 
-// ___________________________Write Data Into Firestore Database
 
+// ___________________________Firestore Database Operations
+
+// 1. Write Data
 const writeData = async (collectionName, data)=>{
     const result = await addDoc(collection(fireStoreDb, collectionName), data);
     console.log(result);
@@ -65,6 +61,7 @@ const writeData = async (collectionName, data)=>{
 }
 
 
+// 2. Get Blogs
 const getBlogs = async (collectionName) => {
     const querySnapshot = await getDocs(collection(fireStoreDb, collectionName));
     const blogs = [];
@@ -76,8 +73,7 @@ const getBlogs = async (collectionName) => {
 }
 
 
-// update like
-
+// 3. Update Likes
 const updateLike = async (collectionName, id, likes, likedBy) => {
     if (!collectionName || !id) {
         throw new Error('Collection name and document ID are required');
@@ -97,8 +93,7 @@ const updateLike = async (collectionName, id, likes, likedBy) => {
 }
 
 
-// add comment
-
+// 4. Add Comment
 const addComment = async (collectionName, id, comment) => {
     try {
         const docRef = doc(fireStoreDb, String(collectionName), String(id));
@@ -127,15 +122,69 @@ const addComment = async (collectionName, id, comment) => {
 
 
 
-//__________________________Component start
+// 5. Update Bookmark
+const updateBookmark = async (collectionName, docId, bookmarkedBy) => {
+  try {
+      const docRef = doc(fireStoreDb, collectionName, docId);
+      await updateDoc(docRef, {
+          bookmarkedBy: bookmarkedBy,
+          isBookmarked: true,
+      });
+  } catch (error) {
+      console.error("Error updating bookmark:", error);
+      throw error;
+  }
+};
 
+
+
+// 6. Get Bookmarked Posts
+const getBookmarkedPosts = async (userId) => {
+    try {
+        const querySnapshot = await getDocs(collection(fireStoreDb, 'blogs'));
+        const bookmarkedPosts = [];
+        
+        querySnapshot.forEach((doc) => {
+            const post = doc.data();
+            // Check if the post is bookmarked by the current user
+            if (post.bookmarkedBy && post.bookmarkedBy.includes(userId)) {
+                bookmarkedPosts.push({ id: doc.id, ...post });
+            }
+        });
+        
+        return bookmarkedPosts;
+    } catch (error) {
+        console.error("Error fetching bookmarked posts:", error);
+        throw error;
+    }
+};
+
+
+
+// ___________________________Realtime Database Operations
+const putDataIntoDatabase = async (path, data) => {
+    return await set(ref(db, path), data);
+};
+
+
+
+//__________________________Authentication Operations
 const FirebaseProvider = ({ children }) => {
 
 
 
 
-  //__________________________SignUp User With Email and Password
+  // State
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+
+
+
+
+
+  // 1. Email/Password Sign Up
   const signUpUserWithEmailAndPassword = async (email, password) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -156,8 +205,7 @@ const FirebaseProvider = ({ children }) => {
 
 
 
-  // ___________________________Sign In User With Email and Password
-
+  // 2. Email/Password Sign In
   const signInUserWithEmailAndPassword = async (email, password) => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -176,8 +224,7 @@ const FirebaseProvider = ({ children }) => {
 
 
 
-  // ___________________________SignUp with Google
-
+  // 3. Google Sign In
   const GoogleProvider = new GoogleAuthProvider();
 
   const signInWithGoogle = async () => {
@@ -199,8 +246,7 @@ const FirebaseProvider = ({ children }) => {
 
 
 
-  // ___________________________SignOut
-
+  // 4. Sign Out
   const signOutUser = ()=>{
     signOut(auth);
     console.log("User Signed Out Successfully");
@@ -211,8 +257,7 @@ const FirebaseProvider = ({ children }) => {
 
 
 
-  //   ___________________________OnAuthStateChanged
-
+  // 5. Auth State Observer
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -234,42 +279,27 @@ const FirebaseProvider = ({ children }) => {
 
 
 
-  //___________________________Put Data Into Database
-
-  const putDataIntoDatabase = async (path, data) => {
-    return await set(ref(db, path), data);
-  };
-
-
-
-
-  //___________________________State
-
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-
-
-
-
-
-
-  //_________________________Firebase context Object that are passed to all components
-
+  // Context Value Object
   const firebase = {
+    // Auth-related
     user,
     loading,
     error,
     signUpUserWithEmailAndPassword,
-    putDataIntoDatabase,
     signInWithGoogle,
     signInUserWithEmailAndPassword,
     signOutUser,
+    
+    // Realtime Database
+    putDataIntoDatabase,
+    
+    // Firestore
     writeData,
     getBlogs,
     updateLike,
-    addComment
+    addComment,
+    updateBookmark,
+    getBookmarkedPosts
   };
 
 

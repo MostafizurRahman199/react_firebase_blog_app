@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useFirebase } from '../context/Firebase';
+import { toast } from 'react-toastify';
 
 const Blogs = () => {
     const [isLoading, setIsLoading] = useState(true);
-    const {getBlogs, updateLike, user, addComment} = useFirebase();
+    const {getBlogs, updateLike, user, addComment, updateBookmark} = useFirebase();
     const [blogs, setBlogs] = useState([]); 
     const [commentText, setCommentText] = useState('');
     const [openComments, setOpenComments] = useState(null);
@@ -25,12 +26,13 @@ const Blogs = () => {
     useEffect(()=>{
         getBlogs("blogs")
         .then(blogs => {
-            // Add isLiked property to each blog based on current user
-            const blogsWithLikeStatus = blogs.map(blog => ({
+            // Add isLiked and isBookmarked properties
+            const blogsWithStatus = blogs.map(blog => ({
                 ...blog,
-                isLiked: user && blog.likedBy ? blog.likedBy.includes(user.uid) : false
+                isLiked: user && blog.likedBy ? blog.likedBy.includes(user.uid) : false,
+                isBookmarked: user && blog.bookmarkedBy ? blog.bookmarkedBy.includes(user.uid) : false
             }));
-            setBlogs(blogsWithLikeStatus);
+            setBlogs(blogsWithStatus);
         })
         .catch(err=>console.log(err))
         .finally(()=>setIsLoading(false));
@@ -144,6 +146,58 @@ const Blogs = () => {
         setOpenComments(openComments === blogId ? null : blogId);
     };
 
+    const handleBookmark = async (blogId) => {
+        try {
+            if (!user) {
+                toast.error("Please login to bookmark posts");
+                return;
+            }
+
+            const blogToUpdate = blogs.find(blog => blog.id === blogId);
+            if (!blogToUpdate) return;
+
+            if (blogToUpdate.bookmarkedBy && blogToUpdate.bookmarkedBy.includes(user.uid)) {
+                // Remove bookmark
+                const newBookmarkedBy = blogToUpdate.bookmarkedBy.filter(id => id !== user.uid);
+                
+                // Update Firebase
+                await updateBookmark("blogs", blogId, newBookmarkedBy);
+                
+                // Update local state
+                setBlogs(blogs.map(blog => {
+                    if (blog.id === blogId) {
+                        return {
+                            ...blog,
+                            bookmarkedBy: newBookmarkedBy,
+                            isBookmarked: false
+                        };
+                    }
+                    return blog;
+                }));
+            } else {
+                // Add bookmark
+                const newBookmarkedBy = [...(blogToUpdate.bookmarkedBy || []), user.uid];
+                
+                // Update Firebase
+                await updateBookmark("blogs", blogId, newBookmarkedBy);
+                
+                // Update local state
+                setBlogs(blogs.map(blog => {
+                    if (blog.id === blogId) {
+                        return {
+                            ...blog,
+                            bookmarkedBy: newBookmarkedBy,
+                            isBookmarked: true
+                        };
+                    }
+                    return blog;
+                }));
+            }
+        } catch (error) {
+            console.error("Error updating bookmark:", error);
+        }
+    };
+
     return (
         <div className="container mx-auto px-4 py-8">
             <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">Featured Articles</h1>
@@ -178,8 +232,17 @@ const Blogs = () => {
                                                 <p className="text-xs text-gray-500">{blog.date} • {blog.time}</p>
                                             </div>
                                         </div>
-                                        <div className="flex items-center space-x-2 text-gray-500 text-sm">
+                                        <div className="flex items-center space-x-3 text-gray-500 text-sm">
                                             <span><i className="fas fa-eye"></i> {blog.views}</span>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleBookmark(blog.id);
+                                                }}
+                                                className="hover:text-blue-500 transition-colors duration-100"
+                                            >
+                                                <i className={`fas fa-bookmark ${blog.isBookmarked ? 'text-blue-500' : ''}`}></i>
+                                            </button>
                                             <span><i className="fas fa-heart text-red-500"></i> {blog.likes}</span>
                                         </div>
                                     </div>

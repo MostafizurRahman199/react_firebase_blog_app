@@ -14,8 +14,7 @@ const Navbar = () => {
   const routes = [
     { path: '/', label: 'Home' },
     { path: '/about', label: 'About' },
-   
-  
+    // Add any other public routes here
   ];
 
   // Create reusable NavLink component
@@ -63,10 +62,10 @@ const Navbar = () => {
                     <>
                     <NavItem to="/blogs">Blogs</NavItem>
                     <NavItem to="/write-blogs">Write Blogs</NavItem>
+                    <NavItem to="/bookmarks">Bookmarks</NavItem>
                     <button onClick={signOutUser} className="text-white hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-md text-sm font-medium">
                         Sign Out
                     </button>
-                
                 </>
                 ) : (
                     <>
@@ -122,11 +121,19 @@ const Navbar = () => {
 
             {
                 user?.uid ? (
-                    <button onClick={signOutUser} className="text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-md text-sm font-medium">
+                    <>
+                    <NavItem to="/blogs" isMobile>Blogs</NavItem>
+                    <NavItem to="/write-blogs" isMobile>Write Blogs</NavItem>
+                    <NavItem to="/bookmarks" isMobile>Bookmarks</NavItem>
+                    <button onClick={signOutUser} className="w-full text-left text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-md text-sm font-medium">
                         Sign Out
                     </button>
+                    </>
                 ) : (
-                    <NavItem to="/login">Login</NavItem>
+                    <>
+                    <NavItem to="/login" isMobile>Login</NavItem>
+                    <NavItem to="/register" isMobile>Register</NavItem>
+                    </>
                 )
             }
           </div>

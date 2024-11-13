@@ -8,6 +8,8 @@ import About from "../Pages/About";
 import PrivateRoutes from "./PrivateRoutes";
 import WriteBlogs from "../Pages/WriteBlogs";
 import Blogs from "../Pages/Blogs";
+import BookMarks from "../Pages/BookMarks";
+import BookmarkDetails from "../Pages/BookmarkDetails";
 
 const router = createBrowserRouter([
     {
@@ -16,6 +18,8 @@ const router = createBrowserRouter([
         children:[
             {path:"/", element:<PrivateRoutes><Home/></PrivateRoutes>},
             {path:"/write-blogs", element:<PrivateRoutes><WriteBlogs/></PrivateRoutes>},
+            {path:"/bookmarks", element:<PrivateRoutes><BookMarks/></PrivateRoutes>},
+            {path:"/bookmarks/:id", element:<PrivateRoutes><BookmarkDetails/></PrivateRoutes>},
             {path:"/blogs", element: <PrivateRoutes><Blogs/></PrivateRoutes>},
             {path:"/login", element:<Login/>},
             {path:"/register", element:<Registration/>},
