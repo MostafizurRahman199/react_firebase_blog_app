@@ -7,7 +7,7 @@ const SignUp  = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { signUpUserWithEmailAndPassword, putDataIntoDatabase, signInWithGoogle } = useFirebase();
+  const { signUpUserWithEmailAndPassword, putDataIntoDatabase, signInWithGoogle, signInWithGithub } = useFirebase();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -36,6 +36,16 @@ const SignUp  = () => {
     } catch (error) {
       console.error("Error signing in with Google:", error);
       toast.error('Failed to sign in with Google. Please try again.', {position: 'top-center'});
+    }
+  };
+
+  const handleGithubSignIn = async () => {
+    try {
+      await signInWithGithub();
+      toast.success('Sign in with Github successful!', {position: 'top-left'});
+    } catch (error) {
+      console.error("Error signing in with Github:", error);
+      toast.error('Failed to sign in with Github. Please try again.', {position: 'top-center'});
     }
   };
 
@@ -122,6 +132,17 @@ const SignUp  = () => {
                 />
               </svg>
               Sign in with Google
+            </button>
+
+            <button
+              type="button"
+              onClick={handleGithubSignIn}
+              className="w-full flex items-center justify-center gap-2 py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12c0-5.523-4.477-10-10-10z" />
+              </svg>
+              Sign in with GitHub
             </button>
           </div>
         </form>

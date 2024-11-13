@@ -6,6 +6,7 @@ import {
   signInWithPopup,
   signInWithEmailAndPassword,
   signOut,
+  GithubAuthProvider,
 } from "firebase/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -28,15 +29,18 @@ export const useFirebase = () => useContext(FirebaseContext);
 //__________________________Firebase Config
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBEiXUPZ_XYunZhzA_UaZGb_Kq1tOs6AXg",
-  authDomain: "fir-app-db3c0.firebaseapp.com",
-  projectId: "fir-app-db3c0",
-  storageBucket: "fir-app-db3c0.firebasestorage.app",
-  messagingSenderId: "873625399799",
-  appId: "1:873625399799:web:07206c5bcff1694b0d3ef2",
-  databaseURL: "https://fir-app-db3c0-default-rtdb.firebaseio.com/",
-  
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
 };
+
+if (!firebaseConfig.apiKey) {
+  throw new Error('Firebase API key is missing. Please check your environment variables.');
+}
 
 
 
@@ -266,6 +270,23 @@ const FirebaseProvider = ({ children }) => {
 
 
 
+// 4. Github Login
+
+const githubProvider = new GithubAuthProvider();
+const signInWithGithub = async ()=>{
+  try {
+    const result = await signInWithPopup(auth, githubProvider);
+    console.log(result);
+    console.log("User Signed In Successfully");
+    setLoading(false);
+    setUser(result.user);
+    return result;
+  } catch (error) {
+    console.log(error.message);
+    throw error;
+  }
+}
+
 
 
 
@@ -325,6 +346,7 @@ const FirebaseProvider = ({ children }) => {
     updateBookmark,
     getBookmarkedPosts,
     deleteComment,
+    signInWithGithub,
   };
 
 
