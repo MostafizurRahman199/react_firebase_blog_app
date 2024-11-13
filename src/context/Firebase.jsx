@@ -159,6 +159,30 @@ const getBookmarkedPosts = async (userId) => {
     }
 };
 
+// 7. Delete Comment
+const deleteComment = async (collectionName, blogId, commentIndex) => {
+  try {
+      const docRef = doc(fireStoreDb, String(collectionName), String(blogId));
+      const docSnap = await getDoc(docRef);
+      
+      if (docSnap.exists()) {
+          const currentComments = docSnap.data().comments;
+          // Remove the comment at the specified index
+          currentComments.splice(commentIndex, 1);
+          
+          // Update the document with the new comments array
+          const result = await updateDoc(docRef, { 
+              comments: currentComments,
+              commentCount: increment(-1)
+          });
+          return result;
+      }
+  } catch (error) {
+      console.error("Error deleting comment:", error);
+      throw error;
+  }
+}
+
 
 
 // ___________________________Realtime Database Operations
@@ -299,7 +323,8 @@ const FirebaseProvider = ({ children }) => {
     updateLike,
     addComment,
     updateBookmark,
-    getBookmarkedPosts
+    getBookmarkedPosts,
+    deleteComment,
   };
 
 

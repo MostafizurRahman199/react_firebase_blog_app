@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { useFirebase } from '../context/Firebase';
+import BlogCard from '../components/BlogCard';
 import { toast } from 'react-toastify';
+import { useSearchParams } from 'react-router-dom';
 
 const Blogs = () => {
     const [isLoading, setIsLoading] = useState(true);
-    const {getBlogs, updateLike, user, addComment, updateBookmark} = useFirebase();
+    const {getBlogs, updateLike, user, addComment, updateBookmark, deleteComment} = useFirebase();
     const [blogs, setBlogs] = useState([]); 
     const [commentText, setCommentText] = useState('');
     const [openComments, setOpenComments] = useState(null);
+    const [isSubmittingComment, setIsSubmittingComment] = useState(false);
+    const [searchParams] = useSearchParams();
+    const highlightedPostId = searchParams.get('postId');
 
     // Array of modern icon styles and colors
     const iconStyles = [
@@ -23,20 +28,28 @@ const Blogs = () => {
         return iconStyles[index % iconStyles.length];
     };
 
-    useEffect(()=>{
+    useEffect(() => {
+        const postId = searchParams.get('postId');
+        
         getBlogs("blogs")
         .then(blogs => {
-            // Add isLiked and isBookmarked properties
             const blogsWithStatus = blogs.map(blog => ({
                 ...blog,
                 isLiked: user && blog.likedBy ? blog.likedBy.includes(user.uid) : false,
                 isBookmarked: user && blog.bookmarkedBy ? blog.bookmarkedBy.includes(user.uid) : false
             }));
-            setBlogs(blogsWithStatus);
+            
+            // If postId is present, filter to show only that post
+            if (postId) {
+                const filteredBlogs = blogsWithStatus.filter(blog => blog.id === postId);
+                setBlogs(filteredBlogs);
+            } else {
+                setBlogs(blogsWithStatus);
+            }
         })
-        .catch(err=>console.log(err))
-        .finally(()=>setIsLoading(false));
-    }, [user]); // Add user as dependency
+        .catch(err => console.log(err))
+        .finally(() => setIsLoading(false));
+    }, [user, searchParams]); // Add searchParams as dependency
 
     
 
@@ -102,13 +115,15 @@ const Blogs = () => {
     const handleComment = async (blogId) => {
         try {
             if (!user) {
-                alert("Please login to comment");
+                toast.error("Please login to comment");
                 return;
             }
             if (!commentText.trim()) {
-                alert("Please enter a comment");
+               toast.warning("Please write comment then submit");
                 return;
             }
+
+            setIsSubmittingComment(true);
 
             const newComment = {
                 text: commentText,
@@ -135,10 +150,11 @@ const Blogs = () => {
                 return blog;
             }));
 
-            // Clear comment input
             setCommentText('');
         } catch (error) {
             console.error("Error adding comment:", error);
+        } finally {
+            setIsSubmittingComment(false);
         }
     };
 
@@ -198,6 +214,31 @@ const Blogs = () => {
         }
     };
 
+    const handleCommentDelete = async (blogId, commentIndex) => {
+        try {
+            // Update local state first for immediate UI update
+            setBlogs(prevBlogs => prevBlogs.map(blog => {
+                if (blog.id === blogId) {
+                    const updatedComments = [...(blog.comments || [])];
+                    updatedComments.splice(commentIndex, 1);
+                    return {
+                        ...blog,
+                        comments: updatedComments,
+                        commentCount: Math.max((blog.commentCount || 0) - 1, 0)
+                    };
+                }
+                return blog;
+            }));
+
+            // Then update Firebase
+            await deleteComment("blogs", blogId, commentIndex);
+        } catch (error) {
+            console.error("Error deleting comment:", error);
+            // Optionally revert the state if the Firebase update fails
+            toast.error("Failed to delete comment");
+        }
+    };
+
     return (
         <div className="container mx-auto px-4 py-8">
             <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">Featured Articles</h1>
@@ -208,142 +249,23 @@ const Blogs = () => {
                 </div>
             ) : (
                 <div className="flex flex-col space-y-6 max-w-2xl mx-auto">
-                    {blogs.map((blog, index) => {
-                        const { icon, color } = getRandomIconStyle(index);
-                        return (
-                            <div key={index} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col">
-                                {blog.image && (
-                                    <div className="h-64 overflow-hidden">
-                                        <img 
-                                            src={blog.image} 
-                                            alt={blog.title} 
-                                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                                        />
-                                    </div>
-                                )}
-                                <div className="p-6 flex-1 flex flex-col">
-                                    <div className="flex items-center justify-between mb-4">
-                                        <div className="flex items-center space-x-3">
-                                            <div className={`w-10 h-10 rounded-full ${color} flex items-center justify-center shadow-lg`}>
-                                                <i className={`fas ${icon} text-md text-white`}></i>
-                                            </div>
-                                            <div>
-                                                <p className="text-sm font-medium text-gray-800">{blog.author}</p>
-                                                <p className="text-xs text-gray-500">{blog.date} • {blog.time}</p>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center space-x-3 text-gray-500 text-sm">
-                                            <span><i className="fas fa-eye"></i> {blog.views}</span>
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleBookmark(blog.id);
-                                                }}
-                                                className="hover:text-blue-500 transition-colors duration-100"
-                                            >
-                                                <i className={`fas fa-bookmark ${blog.isBookmarked ? 'text-blue-500' : ''}`}></i>
-                                            </button>
-                                            <span><i className="fas fa-heart text-red-500"></i> {blog.likes}</span>
-                                        </div>
-                                    </div>
-
-                                    <h2 className="text-xl font-semibold text-gray-800 mb-2 hover:text-blue-600 transition-colors">
-                                        {blog.title}
-                                    </h2>
-                                    
-                                    <p className="text-gray-600 mb-4 text-justify">{blog.content}</p>
-                                    
-                                    <div className="mt-auto">
-                                        <div className="flex flex-wrap gap-2 mb-4">
-                                            {blog.category && (
-                                                <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm">
-                                                    {blog.category}
-                                                </span>
-                                            )}
-                                            {blog.tags && blog.tags.split(',').map((tag, i) => (
-                                                <span key={i} className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm">
-                                                    {tag.trim()}
-                                                </span>
-                                            ))}
-                                        </div>
-
-                                        <div className="flex items-center justify-between">
-                                            <button 
-                                                className="text-gray-600 hover:text-red-500 transition-colors duration-100 flex items-center space-x-2"
-                                                onClick={() => handleLike(blog.id)}
-                                            >
-                                                <i className={`fas fa-heart 
-                                                    ${blog.isLiked ? 'text-red-500 animate-scale-bounce' : ''} 
-                                                    transform transition-all duration-300 
-                                                    hover:scale-110 
-                                                    text-lg`}
-                                                ></i>
-                                                <span>{blog.likes}</span>
-                                            </button>
-                                            <div className="flex items-center space-x-2 text-gray-500">
-                                                <span className="flex items-center space-x-1">
-                                                    <i className="fas fa-comment text-lg"></i>
-                                                    <span>{blog.comments?.length || 0}</span>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="mt-4 border-t pt-4">
-                                    <div 
-                                        onClick={() => toggleComments(blog.id)}
-                                        className="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-3 rounded transition-colors duration-200"
-                                    >
-                                        <h3 className="text-lg font-semibold text-gray-800">Comments ({blog.comments?.length || 0})</h3>
-                                        <i className={`fas fa-chevron-${openComments === blog.id ? 'up' : 'down'} text-gray-500 transition-transform duration-200`}></i>
-                                    </div>
-                                    
-                                    {openComments === blog.id && (
-                                        <>
-                                            {/* Comment List */}
-                                            <div className="space-y-4 mb-6 mt-3 px-3">
-                                                {Array.isArray(blog.comments) && blog.comments.map((comment, i) => (
-                                                    <div key={i} className="bg-gray-50 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
-                                                        <div className="flex justify-between items-center mb-2">
-                                                            <div className="flex items-center gap-2">
-                                                                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                                                                    <span className="text-white text-sm">{comment.authorName[0]}</span>
-                                                                </div>
-                                                                <span className="font-medium text-gray-800">{comment.authorName}</span>
-                                                            </div>
-                                                            <span className="text-sm text-gray-500">
-                                                                {comment.date} • {comment.time}
-                                                            </span>
-                                                        </div>
-                                                        <p className="text-gray-700 ml-10">{comment.text}</p>
-                                                    </div>
-                                                ))}
-                                            </div>
-
-                                            {/* Comment Input */}
-                                            <div className="px-3 mb-4">
-                                                <div className="flex gap-3 bg-gray-50 p-4 rounded-lg shadow-sm">
-                                                    <input
-                                                        type="text"
-                                                        value={commentText}
-                                                        onChange={(e) => setCommentText(e.target.value)}
-                                                        placeholder="Write a comment..."
-                                                        className="flex-1 bg-white border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
-                                                    />
-                                                    <button
-                                                        onClick={() => handleComment(blog.id)}
-                                                        className="bg-blue-500 text-white px-6 py-2.5 rounded-lg hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all duration-200 font-medium"
-                                                    >
-                                                        <i className="fas fa-paper-plane text-lg"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
-                            </div>
-                        );
-                    })}
+                    {blogs.map((blog, index) => (
+                        <BlogCard
+                            key={blog.id}
+                            blog={blog}
+                            isHighlighted={blog.id === highlightedPostId}
+                            iconStyle={getRandomIconStyle(index)}
+                            handleLike={handleLike}
+                            handleBookmark={handleBookmark}
+                            handleComment={handleComment}
+                            toggleComments={toggleComments}
+                            openComments={openComments}
+                            commentText={commentText}
+                            setCommentText={setCommentText}
+                            isSubmittingComment={isSubmittingComment}
+                            onCommentDelete={handleCommentDelete}
+                        />
+                    ))}
                 </div>
             )}
         </div>

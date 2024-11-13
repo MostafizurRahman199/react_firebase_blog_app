@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Grid, Typography, Container } from '@mui/material';
+import { Box, Grid, Typography, Container, CircularProgress } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 // Assuming you have AuthContext
@@ -48,8 +48,18 @@ const BookMarks = () => {
       </Typography>
 
       {loading ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          Loading...
+        <Box sx={{ 
+          display: 'flex', 
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+          gap: 2,
+          minHeight: '200px'
+        }}>
+          <CircularProgress size={40} color="primary" />
+          <Typography variant="body1" color="text.secondary">
+            Loading your bookmarks...
+          </Typography>
         </Box>
       ) : error ? (
         <Typography variant="body1" color="error" sx={{ textAlign: 'center' }}>
