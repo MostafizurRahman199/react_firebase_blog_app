@@ -102,15 +102,8 @@ const PostCard = ({ post }) => {
         </Box>
       </CardContent>
 
-      <CardActions sx={{ justifyContent: 'space-between', px: 2, pb: 2 }}>
-        <Button 
-          size="small" 
-          component={Link} 
-          to={`/post/${post.id}`}
-          color="primary"
-        >
-          Read More
-        </Button>
+      <CardActions sx={{ justifyContent: 'end', px: 2, pb: 2 }}>
+       
         <Button 
           size="small" 
           component={Link} 

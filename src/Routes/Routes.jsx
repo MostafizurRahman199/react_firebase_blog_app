@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
+import { HelmetProvider, Helmet } from 'react-helmet-async';
 import MainLayout from "../layout/MainLayout";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
@@ -14,17 +15,39 @@ import BookmarkDetails from "../Pages/BookmarkDetails";
 const router = createBrowserRouter([
     {
         path:"/",
-        element:<MainLayout/>,
+        element: (
+            <HelmetProvider>
+                <MainLayout/>
+            </HelmetProvider>
+        ),
         children:[
-            {path:"/", element:<PrivateRoutes><Home/></PrivateRoutes>},
-            {path:"/write-blogs", element:<PrivateRoutes><WriteBlogs/></PrivateRoutes>},
-            {path:"/bookmarks", element:<PrivateRoutes><BookMarks/></PrivateRoutes>},
-            {path:"/bookmarks/:id", element:<PrivateRoutes><BookmarkDetails/></PrivateRoutes>},
-            {path:"/blogs", element: <PrivateRoutes><Blogs/></PrivateRoutes>},
-            {path:"/login", element:<Login/>},
-            {path:"/register", element:<Registration/>},
-            {path:"/terms", element:<TermsAndConditions/>},
-            {path:"/about", element:<About/>}
+            {path:"/", element:<PrivateRoutes><Helmet><title>Home | Article</title></Helmet><Home/></PrivateRoutes>},
+            {path:"/write-blogs", element:<PrivateRoutes><Helmet><title>Write Blog | Article</title></Helmet><WriteBlogs/></PrivateRoutes>},
+            {path:"/bookmarks", element:<PrivateRoutes>
+                <Helmet><title>Bookmarks | Article</title></Helmet>
+                <BookMarks/>
+            </PrivateRoutes>},
+            {path:"/bookmarks/:id", element:<PrivateRoutes>
+                <Helmet><title>Bookmark Details | Article</title></Helmet>
+                <BookmarkDetails/>
+            </PrivateRoutes>},
+            {path:"/blogs", element: <PrivateRoutes>
+                <Helmet><title>Blogs | Article</title></Helmet>
+                <Blogs/>
+            </PrivateRoutes>},
+            {path:"/login", element:<>
+                <Helmet><title>Login | Article</title></Helmet>
+                <Login/>
+            </>},
+            {path:"/register", element:<>
+                <Helmet><title>Register | Article</title></Helmet>
+                <Registration/>
+            </>},
+            {path:"/terms", element:<>
+                <Helmet><title>Terms & Conditions | Article</title></Helmet>
+                <TermsAndConditions/>
+            </>},
+            {path:"/about", element:<PrivateRoutes><Helmet><title>About | Article</title></Helmet><About/></PrivateRoutes>}
         ]
     }
 ])
