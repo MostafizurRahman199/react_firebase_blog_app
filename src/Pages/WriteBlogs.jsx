@@ -95,7 +95,7 @@ const WriteBlogs = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto bg-white/80 backdrop-blur-lg p-6 sm:p-8 lg:p-10 rounded-2xl shadow-xl border border-gray-100">
+      <div className="max-w-4xl mx-auto bg-gradient-to-r from-blue-50 to-purple-50 backdrop-blur-lg p-6 sm:p-8 lg:p-10 rounded-2xl shadow-xl border border-gray-100">
         <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600 mb-8 text-center">
           Create Your Story
         </h1>
