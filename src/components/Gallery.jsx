@@ -64,7 +64,7 @@ const Gallery = () => {
                   </span>
                 </div>
               </div>
-              <div className="flex flex-grow  justify-end  items-end  mt-4">
+              <div className="flex flex-grow  justify-end h items-end  mt-4">
                
                 <button 
                   onClick={() => navigate(`/blogs?postId=${post.id}`)}

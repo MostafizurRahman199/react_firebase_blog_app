@@ -41,7 +41,7 @@ const Navbar = () => {
   ));
 
   return (
-    <nav className="bg-gray-900 text-gray-300 fixed top-0 left-0 right-0 z-50">
+    <nav className="bg-gradient-to-r from-blue-500 to-purple-600 text-gray-300 fixed top-0 left-0 right-0 z-50 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Logo/Brand */}
@@ -49,9 +49,6 @@ const Navbar = () => {
             <NavLink to="/" className="flex items-center text-xl font-bold text-white">
               Article<FiFeather className="h-8 w-8" />
             </NavLink>
-
-            {/* Sign Out Button */}
-         
           </div>
 
           {/* Desktop Navigation */}
@@ -63,7 +60,7 @@ const Navbar = () => {
                     <NavItem to="/blogs">Blogs</NavItem>
                     <NavItem to="/write-blogs">Write Blogs</NavItem>
                     <NavItem to="/bookmarks">Bookmarks</NavItem>
-                    <button onClick={signOutUser} className="text-white hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-md text-sm font-medium">
+                    <button onClick={signOutUser} className="text-white hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">
                         Sign Out
                     </button>
                 </>
@@ -80,7 +77,7 @@ const Navbar = () => {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 transition duration-300 ease-in-out"
             >
               <span className="sr-only">Open main menu</span>
               {!isOpen ? (
@@ -125,7 +122,7 @@ const Navbar = () => {
                     <NavItem to="/blogs" isMobile>Blogs</NavItem>
                     <NavItem to="/write-blogs" isMobile>Write Blogs</NavItem>
                     <NavItem to="/bookmarks" isMobile>Bookmarks</NavItem>
-                    <button onClick={signOutUser} className="w-full text-left text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-md text-sm font-medium">
+                    <button onClick={signOutUser} className="w-full text-left text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">
                         Sign Out
                     </button>
                     </>

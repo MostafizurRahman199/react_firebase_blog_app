@@ -54,7 +54,7 @@ const BlogCard = ({
                             }}
                             className="hover:text-blue-500 transition-colors duration-100"
                         >
-                            <i className={`fas fa-bookmark ${blog.isBookmarked ? 'text-blue-500' : ''}`}></i>
+                            <i className={`fas fa-bookmark ${blog.isBookmarked ? 'text-blue-500 animate-scale-bounce' : ''}`}></i>
                         </button>
                         <span><i className="fas fa-heart text-red-500"></i> {blog.likes}</span>
                     </div>
@@ -83,7 +83,7 @@ const BlogCard = ({
 
                     <div className="flex items-center justify-between">
                         <button 
-                            className="text-gray-600 hover:text-red-500 transition-colors duration-100 flex items-center space-x-2"
+                            className="text-gray-600 hover:text-red-500 transition-colors duration-100 flex items-center space-x-2 "
                             onClick={() => handleLike(blog.id)}
                         >
                             <i className={`fas fa-heart 
