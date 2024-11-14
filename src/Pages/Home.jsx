@@ -15,10 +15,10 @@ const Home = () => {
       <Gallery />
       <div className="bg-gradient-to-r from-blue-500 to-purple-600 py-20">
         <div className="w-10/12 mx-auto px-4 text-center">
-          <div className="max-w-2xl mx-auto">
-            <div className="relative overflow-hidden group hover:shadow-2xl transition-all duration-300 rounded-lg mb-8">
+          <div className="max-w-3xl mx-auto">
+            <div className="relative  overflow-hidden group hover:shadow-2xl transition-all duration-300 rounded-lg mb-8">
               <img 
-                src="image2.png" 
+                src="image3.png" 
                 alt="Motivational" 
                 className="w-full h-[400px] object-contain transform group-hover:scale-105 transition-transform duration-300" 
               />
