@@ -1,28 +1,121 @@
-import React from 'react'
+import { Carousel, Typography, Button } from "@material-tailwind/react";
+import { Link } from "react-router-dom";
+ 
+export default function Banner() {
+  const scrollToLatestPosts = () => {
+    const element = document.getElementById('latest-posts');
+    element?.scrollIntoView({ behavior: 'smooth' });
+  };
 
-const Banner = () => {
   return (
-    <div className="relative bg-gradient-to-r from-blue-600 to-indigo-700">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Welcome to Our Platform
-          </h1>
-          <p className="text-lg md:text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Discover amazing features and solutions that will transform your experience
-          </p>
-          <div className="space-x-4">
-            <button className="bg-white text-blue-600 px-6 py-2 rounded-lg font-semibold hover:bg-blue-50 transition duration-300">
-              Get Started
-            </button>
-            <button className="border-2 border-white text-white px-6 py-2 rounded-lg font-semibold hover:bg-white/10 transition duration-300">
-              Learn More
-            </button>
+    <div className="h-[600px]  w-full">
+      <Carousel className=" h-full">
+        <div className="relative h-full w-full">
+          <img
+            src="https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2560&q=80"
+            alt="image 1"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 grid h-full w-full place-items-center bg-black/75">
+            <div className="w-3/4 text-center md:w-2/4">
+              <Typography
+                variant="h1"
+                color="white"
+                className="mb-4 text-3xl md:text-4xl lg:text-5xl"
+              >
+                Welcome to Our Blog
+              </Typography>
+              <Typography
+                variant="lead"
+                color="white"
+                className="mb-12 opacity-80"
+              >
+                Discover insightful articles, expert opinions, and the latest trends. 
+                Join our community of readers and writers sharing knowledge and 
+                experiences that matter.
+              </Typography>
+              <div className="flex justify-center gap-2">
+                <Button size="lg" color="white" onClick={scrollToLatestPosts} >
+                  Latest Posts
+                </Button>
+                <Button size="lg" color="white" variant="text">
+                  Categories
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+        <div className="relative h-full w-full">
+          <img
+            src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80"
+            alt="image 2"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 grid h-full w-full items-center bg-black/75">
+            <div className="w-3/4 pl-12 md:w-2/4 md:pl-20 lg:pl-32">
+              <Typography
+                variant="h1"
+                color="white"
+                className="mb-4 text-3xl md:text-4xl lg:text-5xl"
+              >
+                Featured Articles
+              </Typography>
+              <Typography
+                variant="lead"
+                color="white"
+                className="mb-12 opacity-80"
+              >
+                Explore our carefully curated collection of featured posts. From technology 
+                to lifestyle, our expert writers bring you compelling stories and valuable 
+                insights every week.
+              </Typography>
+              <div className="flex gap-2">
+                <Button size="lg" color="white">
+                 <Link to="/blogs">Read More</Link>
+                </Button>
+                <Button size="lg" color="white" variant="text">
+                  Subscribe
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="relative h-full w-full">
+          <img
+            src="https://images.unsplash.com/photo-1518623489648-a173ef7824f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2762&q=80"
+            alt="image 3"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 grid h-full w-full items-center bg-black/75">
+            <div className="w-3/4 pl-12 md:w-2/4 md:pl-20 lg:pl-32">
+              <Typography
+                variant="h1"
+                color="white"
+                className="mb-4 text-3xl md:text-4xl lg:text-5xl"
+              >
+                Join Our Community
+              </Typography>
+              <Typography
+                variant="lead"
+                color="white"
+                className="mb-12 opacity-80"
+              >
+                Be part of our growing community of writers and readers. Share your 
+                thoughts, engage in discussions, and stay updated with the latest content 
+                in your favorite topics.
+              </Typography>
+              <div className="flex gap-2">
+                <Button size="lg" color="white">
+                  <Link to="/register">Sign Up</Link>
+                </Button>
+                <Button size="lg" color="white" variant="text">
+                  Learn More
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Carousel>
     </div>
-  )
+  );
 }
-
-export default Banner

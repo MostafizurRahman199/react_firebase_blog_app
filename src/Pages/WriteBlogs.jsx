@@ -94,133 +94,137 @@ const WriteBlogs = () => {
 // ___________________________Component return
 
   return (
-    <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 shadow-md rounded-md my-8 bg-gradient-to-r from-indigo-100 to-purple-100">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">Create New Blog</h1>
-      
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-            Blog Title
-          </label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            value={blogData.title}
-            onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-            placeholder="Enter your blog title"
-            required
-          />
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto bg-white/80 backdrop-blur-lg p-6 sm:p-8 lg:p-10 rounded-2xl shadow-xl border border-gray-100">
+        <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600 mb-8 text-center">
+          Create Your Story
+        </h1>
+        
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <div className="group">
+            <label htmlFor="title" className="block text-sm font-semibold text-gray-700 mb-2 transition-colors group-focus-within:text-purple-600">
+              Blog Title
+            </label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={blogData.title}
+              onChange={handleChange}
+              className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 transition-all duration-200 p-3"
+              placeholder="Enter your blog title"
+              required
+            />
+          </div>
 
-        <div>
-          <label htmlFor="author" className="block text-sm font-medium text-gray-700">
-            Author Name
-          </label>
-          <input
-            type="text"
-            id="author"
-            name="author"
-            value={blogData.author}
-            onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-            placeholder="Enter author name"
-            required
-          />
-        </div>
+          <div className="group">
+            <label htmlFor="author" className="block text-sm font-semibold text-gray-700 mb-2 transition-colors group-focus-within:text-purple-600">
+              Author Name
+            </label>
+            <input
+              type="text"
+              id="author"
+              name="author"
+              value={blogData.author}
+              onChange={handleChange}
+              className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 transition-all duration-200 p-3"
+              placeholder="Enter author name"
+              required
+            />
+          </div>
 
-        <div>
-          <label htmlFor="content" className="block text-sm font-medium text-gray-700">
-            Blog Content
-          </label>
-          <textarea
-            id="content"
-            name="content"
-            value={blogData.content}
-            onChange={handleChange}
-            rows={8}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-            placeholder="Write your blog content here..."
-            required
-          />
-        </div>
+          <div className="group">
+            <label htmlFor="content" className="block text-sm font-semibold text-gray-700 mb-2 transition-colors group-focus-within:text-purple-600">
+              Blog Content
+            </label>
+            <textarea
+              id="content"
+              name="content"
+              value={blogData.content}
+              onChange={handleChange}
+              rows={8}
+              className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 transition-all duration-200 p-3"
+              placeholder="Write your story here..."
+              required
+            />
+          </div>
 
-        <div>
-          <label htmlFor="image" className="block text-sm font-medium text-gray-700">
-            Image URL
-          </label>
-          <input
-            type="url"
-            id="image"
-            name="image"
-            value={blogData.image}
-            onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-            placeholder="Enter image URL"
-          />
-        </div>
+          <div className="group">
+            <label htmlFor="image" className="block text-sm font-semibold text-gray-700 mb-2 transition-colors group-focus-within:text-purple-600">
+              Image URL
+            </label>
+            <input
+              type="url"
+              id="image"
+              name="image"
+              value={blogData.image}
+              onChange={handleChange}
+              className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 transition-all duration-200 p-3"
+              placeholder="Enter image URL"
+            />
+          </div>
 
-        <div>
-          <label htmlFor="category" className="block text-sm font-medium text-gray-700">
-            Category
-          </label>
-          <select
-            id="category"
-            name="category"
-            value={blogData.category}
-            onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-            required
-          >
-            <option value="">Select a category</option>
-            <option value="Technology">Technology</option>
-            <option value="Travel">Travel</option>
-            <option value="Food">Food</option>
-            <option value="Lifestyle">Lifestyle</option>
-            <option value="Fashion">Fashion</option>
-            <option value="Health">Health</option>
-            <option value="Finance">Finance</option>
-            <option value="Education">Education</option>
-            {/* Add more categories as needed */}
-          </select>
-        </div>
+          <div className="group">
+            <label htmlFor="category" className="block text-sm font-semibold text-gray-700 mb-2">
+              Category
+            </label>
+            <select
+              id="category"
+              name="category"
+              value={blogData.category}
+              onChange={handleChange}
+              className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 transition-all duration-200 p-3 appearance-none bg-white"
+              required
+            >
+              <option value="">Select a category</option>
+              <option value="Technology">Technology</option>
+              <option value="Travel">Travel</option>
+              <option value="Food">Food</option>
+              <option value="Lifestyle">Lifestyle</option>
+              <option value="Fashion">Fashion</option>
+              <option value="Health">Health</option>
+              <option value="Finance">Finance</option>
+              <option value="Education">Education</option>
+              {/* Add more categories as needed */}
+            </select>
+          </div>
 
-        <div>
-          <label htmlFor="tags" className="block text-sm font-medium text-gray-700">
-            Tags
-          </label>
-          <input
-            type="text"
-            id="tags"
-            name="tags"
-            value={blogData.tags}
-            onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-            placeholder="Enter tags (comma-separated)"
-          />
-        </div>
+          <div className="group">
+            <label htmlFor="tags" className="block text-sm font-semibold text-gray-700 mb-2 transition-colors group-focus-within:text-purple-600">
+              Tags
+            </label>
+            <input
+              type="text"
+              id="tags"
+              name="tags"
+              value={blogData.tags}
+              onChange={handleChange}
+              className="mt-1 block w-full rounded-xl border-gray-200 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 transition-all duration-200 p-3"
+              placeholder="Enter tags (comma-separated)"
+            />
+          </div>
 
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200 disabled:bg-indigo-400 disabled:cursor-not-allowed"
-          >
-            {isLoading ? (
-              <>
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Posting...
-              </>
-            ) : (
-              'Post Blog'
-            )}
-          </button>
-        </div>
-      </form>
+          <div className="flex justify-end pt-6">
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-3 text-base font-medium text-white shadow-lg hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed transform hover:-translate-y-0.5"
+            >
+              {isLoading ? (
+                <>
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Publishing...
+                </>
+              ) : (
+                'Publish Story'
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }

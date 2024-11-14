@@ -39,7 +39,7 @@ const Gallery = () => {
   }
 
   return (
-    <section className="py-12 px-4 max-w-7xl mx-auto">
+    <section id="latest-posts" className="py-12 px-4 w-10/12 mx-auto">
       <h2 className="text-3xl font-bold mb-8 text-center">Latest Posts</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {posts.map((post) => (
@@ -64,8 +64,8 @@ const Gallery = () => {
                   </span>
                 </div>
               </div>
-              <div className="flex justify-between items-center mt-4">
-                <span className="text-sm text-gray-500">{post.date}</span>
+              <div className="flex flex-grow  justify-end  items-end  mt-4">
+               
                 <button 
                   onClick={() => navigate(`/blogs?postId=${post.id}`)}
                   className="text-blue-500 hover:text-blue-600 font-medium"

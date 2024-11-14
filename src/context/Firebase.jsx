@@ -7,6 +7,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   GithubAuthProvider,
+  TwitterAuthProvider,
 } from "firebase/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -288,6 +289,22 @@ const signInWithGithub = async ()=>{
 }
 
 
+// 5. Twitter Sign In
+const twitterProvider = new TwitterAuthProvider();
+const signInWithTwitter = async () => {
+  try {
+    const result = await signInWithPopup(auth, twitterProvider);
+    console.log("Twitter sign-in successful");
+    setLoading(false);
+    setUser(result.user);
+    return result;
+  } catch (error) {
+    console.log(error.message);
+    throw error;
+  }
+};
+
+
 
 
 
@@ -347,6 +364,7 @@ const signInWithGithub = async ()=>{
     getBookmarkedPosts,
     deleteComment,
     signInWithGithub,
+    signInWithTwitter,
   };
 
 

@@ -1,27 +1,32 @@
 import React from 'react'
 import Banner from '../component/Banner'
 import Gallery from '../components/Gallery'
+import MasonryGridGallery from '../component/MasonryGridGallery'
 
 const Home = () => {
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* <Banner/> */}
+      <Banner/>
       
       {/* Featured Section */}
-      <section className="py-16 px-4 max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Welcome to Our Blog</h1>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Discover insightful articles on technology, lifestyle, and more. Stay updated with the latest trends and knowledge.
-          </p>
-        </div>
-      </section>
+
 
       {/* Gallery Section */}
       <Gallery />
+      <div className="bg-gradient-to-r from-blue-500 to-purple-600 py-16 h-96 flex items-center justify-center">
+        <div className="max-w-4xl mx-auto px-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-center text-white mb-4 tracking-tight">
+            Never Give Up
+          </h1>
+          <p className="text-xl text-center text-white/80 font-light">
+            Every step forward is a step closer to your dreams
+          </p>
+        </div>
+      </div>
+      <MasonryGridGallery/>
 
       {/* Newsletter Section */}
-      <section className="bg-blue-600 text-white py-16 px-4">
+      {/* <section className="bg-blue-600 text-white py-16 px-4 w-full">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-4">Subscribe to Our Newsletter</h2>
           <p className="mb-6">Stay updated with our latest articles and news.</p>
@@ -36,7 +41,8 @@ const Home = () => {
             </button>
           </div>
         </div>
-      </section>
+      </section> */}
+   
     </div>
   )
 }
