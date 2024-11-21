@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useFirebase } from '../context/Firebase';
-import { FiFeather } from 'react-icons/fi';
+import { FiFeather, FiHome, FiInfo, FiBook, FiEdit, FiBookmark, FiLogIn, FiUserPlus, FiLogOut } from 'react-icons/fi';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,32 +10,35 @@ const Navbar = () => {
   // Add this console.log to debug
   console.log('Current user:', user);
 
-  // Define routes array
+  // Define routes array with icons
   const routes = [
-    { path: '/', label: 'Home' },
-    { path: '/about', label: 'About' },
+    { path: '/', label: 'Home', icon: <FiHome /> },
+    { path: '/about', label: 'About', icon: <FiInfo /> },
     // Add any other public routes here
   ];
 
   // Create reusable NavLink component
-  const NavItem = ({ to, children, isMobile = false }) => (
+  const NavItem = ({ to, children, icon, isMobile = false }) => (
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `${isMobile ? 'block ' : ''}px-3 py-2 rounded-md text-${isMobile ? 'base' : 'sm'} font-medium ${
+        `${isMobile ? 'block ' : ''}px-3 py-2 rounded-md text-${isMobile ? 'base' : 'sm'} font-medium transition duration-300 ease-in-out ${
           isActive
             ? 'text-blue-600 bg-blue-50'
             : 'text-white hover:text-blue-600 hover:bg-blue-50'
         }`
       }
     >
-      {children}
+      <span className="flex items-center">
+        {icon && <span className="mr-2">{icon}</span>}
+        {children}
+      </span>
     </NavLink>
   );
 
   // Replace links fragment with mapped routes
   const desktopLinks = routes.map(route => (
-    <NavItem key={route.path} to={route.path}>
+    <NavItem key={route.path} to={route.path} icon={route.icon}>
       {route.label}
     </NavItem>
   ));
@@ -54,22 +57,21 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-4">
             {desktopLinks}
-            <NavItem to="/blogs">Blogs</NavItem>
-            <NavItem to="/write-blogs">Write Blogs</NavItem>
+            <NavItem to="/blogs" icon={<FiBook />}>Blogs</NavItem>
+            <NavItem to="/write-blogs" icon={<FiEdit />}>Write Blogs</NavItem>
             {
                 user?.uid ? (
                     <>
-                    <NavItem to="/bookmarks">Bookmarks</NavItem>
+                    <NavItem to="/bookmarks" icon={<FiBookmark />}>Bookmarks</NavItem>
                     <button onClick={signOutUser} className="text-white hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">
-                        Sign Out
+                        <FiLogOut className="inline-block mr-2" /> Sign Out
                     </button>
                 </>
                 ) : (
                   <>
-                 
-                    <NavItem to="/login">Login</NavItem>
-                    <NavItem to="/register">Register</NavItem>
-                    </>
+                    <NavItem to="/login" icon={<FiLogIn />}>Login</NavItem>
+                    <NavItem to="/register" icon={<FiUserPlus />}>Register</NavItem>
+                  </>
                 )
             }
           </div>
@@ -112,7 +114,7 @@ const Navbar = () => {
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {routes.map(route => (
-              <NavItem key={route.path} to={route.path} isMobile>
+              <NavItem key={route.path} to={route.path} icon={route.icon} isMobile>
                 {route.label}
               </NavItem>
             ))}
@@ -120,17 +122,17 @@ const Navbar = () => {
             {
                 user?.uid ? (
                     <>
-                    <NavItem to="/blogs" isMobile>Blogs</NavItem>
-                    <NavItem to="/write-blogs" isMobile>Write Blogs</NavItem>
-                    <NavItem to="/bookmarks" isMobile>Bookmarks</NavItem>
+                    <NavItem to="/blogs" icon={<FiBook />} isMobile>Blogs</NavItem>
+                    <NavItem to="/write-blogs" icon={<FiEdit />} isMobile>Write Blogs</NavItem>
+                    <NavItem to="/bookmarks" icon={<FiBookmark />} isMobile>Bookmarks</NavItem>
                     <button onClick={signOutUser} className="w-full text-left text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">
-                        Sign Out
+                        <FiLogOut className="inline-block mr-2" /> Sign Out
                     </button>
                     </>
                 ) : (
                     <>
-                    <NavItem to="/login" isMobile>Login</NavItem>
-                    <NavItem to="/register" isMobile>Register</NavItem>
+                    <NavItem to="/login" icon={<FiLogIn />} isMobile>Login</NavItem>
+                    <NavItem to="/register" icon={<FiUserPlus />} isMobile>Register</NavItem>
                     </>
                 )
             }

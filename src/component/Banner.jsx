@@ -1,16 +1,30 @@
 import { Carousel, Typography, Button } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
- 
+import { motion } from "framer-motion";
+
 export default function Banner() {
   const scrollToLatestPosts = () => {
     const element = document.getElementById('latest-posts');
     element?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const fadeIn = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { duration: 1 } }
+  };
+
   return (
-    <div className="h-[600px]  w-full">
-      <Carousel className=" h-full">
-        <div className="relative h-full w-full">
+    <div className="h-[600px] w-full">
+      <Carousel className="h-full">
+        <motion.div
+          className="relative h-full w-full"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { scale: 0.5, opacity: 0 },
+            visible: { scale: 1, opacity: 1, transition: { duration: 0.8 } }
+          }}
+        >
           <img
             src="banner1.png"
             alt="image 1"
@@ -44,8 +58,13 @@ export default function Banner() {
               </div>
             </div>
           </div>
-        </div>
-        <div className="relative h-full w-full">
+        </motion.div>
+        <motion.div
+          className="relative h-full w-full"
+          initial="hidden"
+          animate="visible"
+          variants={fadeIn}
+        >
           <img
             src="banner3.png"
             alt="image 2"
@@ -79,8 +98,13 @@ export default function Banner() {
               </div>
             </div>
           </div>
-        </div>
-        <div className="relative h-full w-full">
+        </motion.div>
+        <motion.div
+          className="relative h-full w-full"
+          initial="hidden"
+          animate="visible"
+          variants={fadeIn}
+        >
           <img
             src="banner5.jpeg"
             alt="image 3"
@@ -114,7 +138,7 @@ export default function Banner() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </Carousel>
     </div>
   );
