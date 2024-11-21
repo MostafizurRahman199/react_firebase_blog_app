@@ -54,18 +54,19 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-4">
             {desktopLinks}
+            <NavItem to="/blogs">Blogs</NavItem>
+            <NavItem to="/write-blogs">Write Blogs</NavItem>
             {
                 user?.uid ? (
                     <>
-                    <NavItem to="/blogs">Blogs</NavItem>
-                    <NavItem to="/write-blogs">Write Blogs</NavItem>
                     <NavItem to="/bookmarks">Bookmarks</NavItem>
                     <button onClick={signOutUser} className="text-white hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">
                         Sign Out
                     </button>
                 </>
                 ) : (
-                    <>
+                  <>
+                 
                     <NavItem to="/login">Login</NavItem>
                     <NavItem to="/register">Register</NavItem>
                     </>

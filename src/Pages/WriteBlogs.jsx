@@ -134,7 +134,7 @@ const WriteBlogs = () => {
           </div>
 
           <div className="group">
-            <label htmlFor="content" className="block text-sm font-semibold text-gray-700 mb-2 transition-colors group-focus-within:text-purple-600">
+            <label htmlFor="content" className="block text-sm font-semibold text-gray-700 mb-2 transition-colors group-focus-within:text-purple-600 whitespace-pre-wrap">
               Blog Content
             </label>
             <textarea
